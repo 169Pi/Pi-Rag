@@ -8,3 +8,4 @@ langchain-community
 sentence-transformers
 PyPDF2
 rank-bm25
+openai==1.23.6

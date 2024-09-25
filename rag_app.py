@@ -3,6 +3,7 @@ import os
 import fitz
 import json
 from groq import Groq
+from openai import OpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain_community.embeddings import SentenceTransformerEmbeddings
@@ -82,7 +83,7 @@ def load_and_retrieve(query):
     return results
 
 def generate_response(relevant_text, query, chat_history):
-    client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     background_info = """
     Q. What is Pi RAG?
     A. Pi RAG is a Retrieval-Augmented Generation (RAG) system built using the Pi LLM. It combines retrieval-based information with generative AI, offering versatile question-answering capabilities by leveraging external reference documents and its vast knowledge base.
@@ -102,7 +103,7 @@ def generate_response(relevant_text, query, chat_history):
     formatted_query = f"""
 You are an Document Search Agent build by 169pi Team. You know nothing and have no knowledge about the world. 
 
-Your name is Pi RAG.
+YOUR NAME IS 'Pi RAG.'
 
 Here is the user_query: {query}
 
@@ -114,18 +115,17 @@ background_information_tool: {background_info}
 tool description:
 chat_history_tool description: This tool has an access to previous message history data. Use this tool only if the user_query is contextualy linked and similar to chat_history data.
 document_data_tool description: This tool has an access to extracted document_data based on user_query.
+background_information_tool: This tool has all the information related to background Information about Pi RAG
 
-Follow the below Instruction:
+STRICTLY Follow the below Instruction:
 * Understand the user_query and decide which tool you need to use (based on tool description) to answer the given user_query.
-* ONLY used the tools to answer user_query.
+* ONLY USE THE tools TO answer user_query. NEVER generate anyting on your own.
 * IF the user wants to know about the Pi RAG, asking questions like "What can you do for me?", "Who are the members involved in building you?", "Which LLM you are using" etc. THEN ONLY use background_information_tool to answer the user_query.
-* IF the user_query has open-ended questions like eg:- 'Summarize the pdf/doc' THEN answer should be 'Please specify the name of the document or any specific topic from it to answer'
-* IF you don't find the answer in document_data_tool then DO NOT hallucinate STRICTLY just say 'Please ask the question related to upload documents only.'
+* IF you don't find the answer in any tool then DO NOT hallucinate STRICTLY just say 'Please ask the question related to upload documents only.'
 * IF you find the answer in chat_history_tool then do not use the answer as it is. It should be identical.
 * Don't start your answer with PREAMBLE or Any introductory statements like 'Document_data_tool', 'Here is the answer', 'Answer:', 'Begin!'. start right away.
 * Answer the user's query in a professional but warm and conversational tone. Provide clear, concise information while maintaining a human touch.
 * makesure you generate the answer in markdown format only.
-* DO NOT add any Note at the end of the answer eg: 'Note: As I don't find any infomration about the requestion information in document_data_tool or chat_history_tool and background tool information not have an access to requested data and user request having contextual meaning I don't have any more relevant answer to the request' This is a bad user experience never add something like this.
 
 Answer:
 Begin!
@@ -138,7 +138,7 @@ Begin!
                 "content": formatted_query,
             }
         ],
-        model="llama-3.1-70b-versatile",
+        model="gpt-4o",
         max_tokens=4096,
         stream=True,
     )
