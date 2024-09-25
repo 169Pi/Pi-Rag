@@ -1,0 +1,10 @@
+streamlit
+python-dotenv
+PyMuPDF
+faiss-cpu
+groq
+langchain
+langchain-community
+sentence-transformers
+PyPDF2
+rank-bm25
