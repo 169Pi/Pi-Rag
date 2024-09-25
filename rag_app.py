@@ -115,7 +115,7 @@ background_information_tool: {background_info}
 tool description:
 chat_history_tool description: This tool has an access to previous message history data. Use this tool only if the user_query is contextualy linked and similar to chat_history data.
 document_data_tool description: This tool has an access to extracted document_data based on user_query.
-background_information_tool: This tool has all the information related to background Information about Pi RAG
+background_information_tool: This tool has all the information related to background Information about Pi RAG (the user wants to know about the Pi RAG, asking questions like "What can you do for me?", "Who build you?", etc.)
 
 STRICTLY Follow the below Instruction:
 * Understand the user_query and decide which tool you need to use (based on tool description) to answer the given user_query.
