@@ -221,13 +221,10 @@ def main():
         pdf_docs = st.file_uploader("⬆️ Upload your PDF & Click to process", accept_multiple_files=True)
         if st.button("Submit & Process"):
             with st.spinner("Extracting Text..."):
-                print('Extracting Text...')
                 raw_text = get_pdf_text(pdf_docs)
-            with st.spinner("Chunking & Creating doc..."):
-                print('Chunking & Creating doc...')
+            with st.spinner("Chunking..."):
                 docs = create_documents(raw_text)
             with st.spinner("Saving Vector DB..."):
-                print('Saving Vector DB...')
                 save_vector_store(docs)
                 st.success("Done")
             
